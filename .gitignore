@@ -1,0 +1,9 @@
+node_modules
+.next
+out
+.env
+.env.local
+*.db
+sh.exe.stackdump
+dev.log
+Resources/
