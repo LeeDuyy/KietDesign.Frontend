@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 40 1080 640" width="1080">
+<defs>
+<linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d8cdbf"/><stop offset="1" stop-color="#a89b8c"/></linearGradient>
+<linearGradient id="metalV" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#cbbfb1"/><stop offset="1" stop-color="#e2d8cb"/></linearGradient>
+<linearGradient id="gold" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#a98a66"/><stop offset="1" stop-color="#e3c9a3"/></linearGradient>
+<linearGradient id="green" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34433b"/><stop offset="1" stop-color="#2F3A34"/></linearGradient>
+</defs>
+<g id="mark">
+<polygon points="362,265 420,225 420,430 362,430" fill="url(#metalV)"/>
+<polygon points="435,155 512,85 512,430 435,430" fill="url(#green)"/>
+<rect x="520" y="125" width="12" height="305" fill="url(#metal)"/>
+<rect x="538" y="140" width="12" height="290" fill="url(#metal)"/>
+<path d="M527.5,120.5 A114,114 0 1 1 622,281.6" fill="none" stroke="#B89B7A" stroke-width="9" stroke-linecap="round"/>
+<polygon points="560,240 722,140 562,312" fill="url(#gold)"/>
+<polygon points="558,322 590,288 732,430 652,430" fill="url(#metal)"/>
+</g><g font-family="Montserrat, Poppins, 'Segoe UI', Arial, sans-serif" fill="#2F3A34">
+<text x="35" y="558" font-size="66" font-weight="500" textLength="1015" lengthAdjust="spacing">TRẦN QUANG NHÂN KIỆT</text>
+<text x="190" y="640" font-size="38" font-weight="400" fill="#B89B7A" textLength="710" lengthAdjust="spacing">ARCHITECTURE &amp; DESIGN</text>
+<rect x="48" y="626" width="102" height="3" fill="#B89B7A"/><rect x="942" y="626" width="102" height="3" fill="#B89B7A"/></g>
+</svg>

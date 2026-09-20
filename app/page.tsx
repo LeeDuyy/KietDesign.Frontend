@@ -1,13 +1,15 @@
 import Image from "next/image";
-import ProjectSlider from "@/components/ProjectSlider";
+import ProjectsList from "@/components/ProjectsList";
 import BookingForm from "@/components/BookingForm";
+import MobileNav from "@/components/MobileNav";
+import ScrollReveal from "@/components/ScrollReveal";
 import { projects } from "@/lib/projects";
 
 const jsonLd = {
 	"@context": "https://schema.org",
 	"@type": "HomeAndConstructionBusiness",
-	name: "Kiệt Trần Design",
-	description: "Studio thiết kế và thi công nội thất trọn gói tại TP. Hồ Chí Minh.",
+	name: "Trần Quang Nhân Kiệt — Architecture & Design",
+	description: "Studio kiến trúc và thiết kế nội thất trọn gói tại TP. Hồ Chí Minh.",
 	address: {
 		"@type": "PostalAddress",
 		streetAddress: "12 Đường ABC",
@@ -15,7 +17,8 @@ const jsonLd = {
 		addressRegion: "TP. Hồ Chí Minh",
 		addressCountry: "VN",
 	},
-	telephone: "+84900000000",
+	telephone: "+84912345678",
+	email: "kiet@kdesign.vn",
 	areaServed: "TP. Hồ Chí Minh",
 	priceRange: "$$",
 };
@@ -27,59 +30,100 @@ export default function Home() {
 
 			<header className="site">
 				<nav>
-					<div className="brand">
-						KIỆT TRẦN
-						<small>STUDIO THIẾT KẾ NỘI THẤT</small>
+					<div className="brand-logo">
+						<Image src="/logos/logo-full.svg" alt="Trần Quang Nhân Kiệt — Architecture &amp; Design" width={169} height={100} unoptimized />
 					</div>
 					<ul className="nav-links">
-						<li><a href="#ve-chung-toi">Về chúng tôi</a></li>
+						<li><a className="active" href="/">Trang chủ</a></li>
+						<li><a href="#ve-chung-toi">Giới thiệu</a></li>
 						<li><a href="#dich-vu">Dịch vụ</a></li>
-						<li><a href="#quy-trinh">Quy trình</a></li>
 						<li><a href="#du-an">Dự án</a></li>
-						<li><a href="#hoi-dap">Hỏi đáp</a></li>
+						<li><a href="#">Tin tức</a></li>
+						<li><a href="#dat-lich">Liên hệ</a></li>
 					</ul>
-					<a className="btn btn-primary" href="#dat-lich">Đặt lịch tư vấn</a>
+					<MobileNav />
 				</nav>
 			</header>
 
-			<section className="hero-media">
-				<Image
-					src="/images/living-terracotta.jpg"
-					alt="Phòng khách căn hộ Anh Hoàng, tường đất nung, sofa da nâu, quận 7"
-					fill
-					priority
-					sizes="100vw"
-				/>
-				<div className="hero-scrim" />
-				<div className="hero-copy">
-					<h1>Bản vẽ hôm nay,<br />tổ ấm ngày mai</h1>
-					<p className="lede">
-						Kiệt Trần đồng hành từ buổi khảo sát đầu tiên đến ngày bàn giao — thiết kế 3D rõ ràng, vật liệu minh bạch,
-						thi công đúng tiến độ cho căn hộ, nhà phố và biệt thự tại TP. Hồ Chí Minh và khu vực lân cận.
-					</p>
-					<div className="hero-actions">
-						<a className="btn btn-primary" href="#dat-lich">Đặt lịch khảo sát miễn phí</a>
-						<a className="btn btn-invert" href="#du-an">Xem dự án đã thực hiện</a>
+			<section className="hero-full">
+				<div className="hero-media">
+					<Image
+						src="/images/living-terracotta.jpg"
+						alt="Phòng khách căn hộ Anh Hoàng, tường đất nung, sofa da nâu, quận 7"
+						fill
+						priority
+						sizes="100vw"
+					/>
+					<div className="hero-tag" aria-hidden="true">
+						<span>Architecture</span>
+						<span>Interior</span>
+						<span>Landscape</span>
 					</div>
+				</div>
+				<div className="hero-full-card">
+					<h1>Kiến tạo<br />không gian<br />sống bền vững</h1>
+					<div className="hero-rule" />
+					<p className="lede">
+						Từ nền tảng vững chắc, dẫn dắt bởi ý tưởng sáng tạo — kiến tạo những công trình bền vững
+						cho từng gia đình, từ kiến trúc đến nội thất.
+					</p>
+					<ul className="hero-mobile-tags">
+						<li>Kiến trúc</li>
+						<li>Nội thất</li>
+						<li>Cảnh quan</li>
+					</ul>
+					<a className="btn btn-ink" href="#du-an">Khám phá dự án <span aria-hidden="true">→</span></a>
+				</div>
+				<div className="hero-pager" aria-hidden="true">
+					<b>01</b><i />
+					<span>02</span>
+					<span>03</span>
+					<span>04</span>
+					<span>05</span>
 				</div>
 			</section>
 
-			<main>
-				<section className="stats" aria-label="Số liệu studio">
-					<div className="stat"><b>120+</b><span>dự án đã hoàn thiện</span></div>
-					<div className="stat"><b>8 năm</b><span>kinh nghiệm thiết kế</span></div>
-					<div className="stat"><b>35 ngày</b><span>trung bình khảo sát → concept</span></div>
-					<div className="stat"><b>4.9/5</b><span>đánh giá từ khách hàng</span></div>
-				</section>
+			<div className="hero-tags-band">
+				<span>Architecture</span>
+				<span>Interior</span>
+				<span>Landscape</span>
+			</div>
 
+			<ScrollReveal>
+				<div className="image-band">
+					<Image
+						src="/images/resort-exterior.jpg"
+						alt="Phối cảnh biệt thự nghỉ dưỡng sân vườn, Phan Thiết"
+						fill
+						sizes="100vw"
+						priority
+					/>
+					<div className="image-band-badge"><span>K·T</span></div>
+					<div className="image-band-copy">
+						<h2>Lắng nghe.<br />Kiến tạo.<br />An cư.</h2>
+					</div>
+				</div>
+			</ScrollReveal>
+
+			<main>
+				<ScrollReveal>
+					<section className="stats" aria-label="Số liệu studio">
+						<div className="stat"><b>120+</b><span>dự án đã hoàn thiện</span></div>
+						<div className="stat"><b>8 năm</b><span>kinh nghiệm thiết kế</span></div>
+						<div className="stat"><b>35 ngày</b><span>trung bình khảo sát → concept</span></div>
+						<div className="stat"><b>4.9/5</b><span>đánh giá từ khách hàng</span></div>
+					</section>
+				</ScrollReveal>
+
+				<ScrollReveal>
 				<section id="ve-chung-toi">
 					<div className="about">
 						<div>
-							<h2 className="about-heading">Về Kiệt Trần</h2>
+							<h2 className="about-heading">Về Trần Quang Nhân Kiệt</h2>
 							<p>
-								Kiệt Trần là một studio nhỏ, làm việc trực tiếp với từng gia chủ thay vì qua nhiều tầng nhân sự. Đội thiết
-								kế 3D và đội thi công nằm trong cùng một studio, nên bản vẽ và hiện trường luôn khớp nhau — không có chuyện
-								&ldquo;vẽ một đằng, làm một nẻo&rdquo;.
+								Trần Quang Nhân Kiệt là một studio kiến trúc &amp; nội thất quy mô nhỏ, làm việc trực tiếp với từng gia chủ
+								thay vì qua nhiều tầng nhân sự. Đội kiến trúc, đội thiết kế 3D và đội thi công nằm trong cùng một studio,
+								nên bản vẽ và hiện trường luôn khớp nhau — không có chuyện &ldquo;vẽ một đằng, làm một nẻo&rdquo;.
 							</p>
 							<p>
 								Chúng tôi không theo một phong cách cố định. Từ ấm áp đương đại, tối giản, đến nghỉ dưỡng nhiệt đới —
@@ -106,7 +150,22 @@ export default function Home() {
 						</ul>
 					</div>
 				</section>
+				</ScrollReveal>
 
+				<section id="du-an">
+					<ScrollReveal>
+						<div className="section-head">
+							<div>
+								<h2>Dự án tiêu biểu</h2>
+								<p>5 công trình tiêu biểu — từ căn hộ, nhà phố đến nghỉ dưỡng và F&amp;B.</p>
+							</div>
+							<span className="section-num mono">DA.01 – DA.05</span>
+						</div>
+					</ScrollReveal>
+					<ProjectsList projects={projects} />
+				</section>
+
+				<ScrollReveal>
 				<section id="dich-vu">
 					<div className="section-head">
 						<div>
@@ -146,7 +205,9 @@ export default function Home() {
 						</div>
 					</div>
 				</section>
+				</ScrollReveal>
 
+				<ScrollReveal>
 				<section id="quy-trinh">
 					<div className="section-head">
 						<div>
@@ -163,34 +224,9 @@ export default function Home() {
 						<div className="step"><b>05</b><h3>Bàn giao &amp; bảo hành</h3><p>Nghiệm thu, dọn dẹp, bàn giao chìa khoá và sổ bảo hành.</p></div>
 					</div>
 				</section>
+				</ScrollReveal>
 
-				<section id="du-an">
-					<div className="section-head">
-						<div>
-							<h2>Dự án tiêu biểu</h2>
-							<p>Lướt qua từng dự án để xem nhiều góc không gian hơn.</p>
-						</div>
-						<span className="section-num mono">DA.01 – DA.05</span>
-					</div>
-
-					{projects.map((project, i) => (
-						<article className="project" key={project.code}>
-							<ProjectSlider slides={project.slides} priority={i === 0} />
-							<div className="project-info">
-								<p className="mono project-code">{project.code}</p>
-								<h3>{project.title}</h3>
-								<p className="mono project-meta">{project.meta}</p>
-								<p className="project-desc">{project.desc}</p>
-								<div className="chips">
-									{project.chips.map((chip) => (
-										<span key={chip}>{chip}</span>
-									))}
-								</div>
-							</div>
-						</article>
-					))}
-				</section>
-
+				<ScrollReveal>
 				<section id="danh-gia">
 					<div className="section-head">
 						<div>
@@ -213,15 +249,17 @@ export default function Home() {
 						</blockquote>
 					</div>
 				</section>
+				</ScrollReveal>
 
+				<ScrollReveal>
 				<section id="dat-lich">
 					<div className="cta-band">
 						<div>
 							<h2>Sẵn sàng vẽ lại<br />không gian sống của bạn?</h2>
 							<p>Đặt lịch khảo sát miễn phí — đội thiết kế liên hệ trong 24 giờ để hẹn thời gian phù hợp.</p>
 							<div className="hero-actions">
-								<a className="btn btn-primary" href="tel:0900000000">Gọi hotline 090 000 0000</a>
-								<a className="btn btn-ghost" style={{ borderColor: "#404040", color: "#fff" }} href="mailto:hello@kiettrandesign.vn">hello@kiettrandesign.vn</a>
+								<a className="btn btn-primary" href="tel:+84912345678">Gọi hotline +84 912 345 678</a>
+								<a className="btn btn-ghost" style={{ borderColor: "#404040", color: "#fff" }} href="mailto:kiet@kdesign.vn">kiet@kdesign.vn</a>
 							</div>
 						</div>
 						<div className="booking-card">
@@ -230,7 +268,9 @@ export default function Home() {
 						</div>
 					</div>
 				</section>
+				</ScrollReveal>
 
+				<ScrollReveal>
 				<section id="hoi-dap">
 					<div className="section-head">
 						<div>
@@ -245,7 +285,7 @@ export default function Home() {
 						</details>
 						<details>
 							<summary>Chi phí thiết kế nội thất chung cư khoảng bao nhiêu?</summary>
-							<p>Chi phí phụ thuộc diện tích, phong cách và vật liệu chọn. Kiệt Trần báo giá chi tiết ngay sau buổi khảo sát miễn phí, không phát sinh ẩn.</p>
+							<p>Chi phí phụ thuộc diện tích, phong cách và vật liệu chọn. Trần Quang Nhân Kiệt báo giá chi tiết ngay sau buổi khảo sát miễn phí, không phát sinh ẩn.</p>
 						</details>
 						<details>
 							<summary>Có cần đặt cọc trước khi khảo sát không?</summary>
@@ -256,7 +296,7 @@ export default function Home() {
 							<p>Có — từ ấm áp đương đại, tối giản, đến nghỉ dưỡng nhiệt đới, tuỳ gu và công năng của từng gia đình, không rập khuôn một phong cách cho mọi dự án.</p>
 						</details>
 						<details>
-							<summary>Kiệt Trần nhận dự án ở khu vực nào?</summary>
+							<summary>Trần Quang Nhân Kiệt nhận dự án ở khu vực nào?</summary>
 							<p>TP. Hồ Chí Minh và các tỉnh lân cận; một số dự án nghỉ dưỡng tại Phan Thiết, Vũng Tàu.</p>
 						</details>
 						<details>
@@ -265,24 +305,28 @@ export default function Home() {
 						</details>
 					</div>
 				</section>
+				</ScrollReveal>
 			</main>
 
 			<footer className="site">
 				<div className="foot-grid">
 					<div>
 						<div className="brand" style={{ marginBottom: ".8rem" }}>
-							KIỆT TRẦN
-							<small>STUDIO THIẾT KẾ NỘI THẤT</small>
+							<Image src="/logos/logo-mark.svg" alt="Biểu trưng Trần Quang Nhân Kiệt" width={44} height={41} unoptimized />
+							<span className="brand-text">
+								TRẦN QUANG NHÂN KIỆT
+								<small>ARCHITECTURE &amp; DESIGN</small>
+							</span>
 						</div>
 						<p style={{ color: "var(--dyl-text-muted)", maxWidth: "34ch", fontSize: ".9rem" }}>
-							Thiết kế và thi công nội thất trọn gói cho căn hộ, nhà phố và biệt thự tại TP. Hồ Chí Minh.
+							Kiến trúc và thiết kế nội thất trọn gói cho căn hộ, nhà phố và biệt thự tại TP. Hồ Chí Minh.
 						</p>
 					</div>
 					<div>
 						<h4>Liên hệ</h4>
 						<ul>
-							<li>090 000 0000</li>
-							<li>hello@kiettrandesign.vn</li>
+							<li>+84 912 345 678</li>
+							<li>kiet@kdesign.vn</li>
 							<li>12 Đường ABC, Quận 7, TP.HCM</li>
 						</ul>
 					</div>
@@ -304,8 +348,8 @@ export default function Home() {
 					</div>
 				</div>
 				<div className="foot-bottom">
-					<span>© 2026 Kiệt Trần Design. Thiết kế nội thất TP.HCM.</span>
-					<span className="mono">PROTOTYPE — v0.3</span>
+					<span>© 2026 Trần Quang Nhân Kiệt — Architecture &amp; Design. TP.HCM.</span>
+					<span className="mono">PROTOTYPE — v0.4</span>
 				</div>
 			</footer>
 

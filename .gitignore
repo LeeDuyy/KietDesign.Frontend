@@ -7,3 +7,4 @@ out
 sh.exe.stackdump
 dev.log
 Resources/
+tsconfig.tsbuildinfo
