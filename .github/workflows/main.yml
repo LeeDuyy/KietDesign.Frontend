@@ -57,6 +57,11 @@ jobs:
           cp -R .next/standalone/. deploy/app/
           cp -R .next/static deploy/app/.next/static
           cp -R public deploy/app/public
+          # Mountpoint cho volume next-cache (compose.yaml). /app mount read-only nên Docker không tự
+          # mkdir được bên trong -> thư mục phải có sẵn trong artifact. upload-artifact bỏ thư mục rỗng,
+          # nên cần file giữ chỗ.
+          mkdir -p deploy/app/.next/cache
+          touch deploy/app/.next/cache/.gitkeep
           # Artifact phải tự chứa: không còn symlink trỏ ra ngoài cây build (pnpm hoisted
           # đã làm node_modules phẳng, nhưng chặn sớm nếu Next lại sinh symlink tuyệt đối).
           test -f deploy/app/server.js
