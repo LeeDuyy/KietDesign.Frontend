@@ -2,6 +2,7 @@ import Image from "next/image";
 import ProjectsList from "@/components/ProjectsList";
 import BookingForm from "@/components/BookingForm";
 import MobileNav from "@/components/MobileNav";
+import HeroImage from "@/components/HeroImage";
 import ScrollReveal from "@/components/ScrollReveal";
 import { projects } from "@/lib/projects";
 
@@ -47,12 +48,9 @@ export default function Home() {
 
 			<section className="hero-full">
 				<div className="hero-media">
-					<Image
+					<HeroImage
 						src="/images/living-terracotta.jpg"
 						alt="Phòng khách căn hộ Anh Hoàng, tường đất nung, sofa da nâu, quận 7"
-						fill
-						priority
-						sizes="100vw"
 					/>
 					<div className="hero-tag" aria-hidden="true">
 						<span>Architecture</span>

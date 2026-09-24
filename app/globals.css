@@ -63,7 +63,7 @@ h1,h2,h3{font-family:var(--dyl-font-display); font-weight:800; text-wrap:balance
 :focus-visible{outline:2px solid var(--dyl-primary); outline-offset:2px;}
 @media (prefers-reduced-motion:reduce){
 	*{transition:none !important; animation:none !important;}
-	.reveal, .hero-full-card > *, .hero-pager{opacity:1 !important; transform:none !important;}
+	.reveal, .hero-full-card > *, .hero-pager, .hero-img, .hero-tag{opacity:1 !important; transform:none !important;}
 }
 
 /* ---------- ruler strip — blueprint scale-bar motif ---------- */
@@ -144,6 +144,10 @@ nav{
 	min-height:max(560px, calc(100vh - 88px));
 }
 .hero-full img{object-fit:cover;}
+/* Hero photo entrance: hidden until decoded (HeroImage adds .hero-img-in on load), then a slow settle. */
+.hero-img{opacity:0;}
+.hero-img-in{animation:hero-img-in 1.2s cubic-bezier(.22,.61,.36,1) forwards;}
+@keyframes hero-img-in{ from{opacity:0; transform:scale(1.06);} to{opacity:1; transform:scale(1);} }
 .hero-media{
 	position:absolute; top:0; right:0; bottom:0; left:auto; width:62%;
 	-webkit-mask-image:linear-gradient(to right, transparent 0, #000 35%);
@@ -156,6 +160,7 @@ nav{
 	text-transform:uppercase; color:var(--dyl-text-muted);
 }
 .hero-tag span{display:block;}
+.hero-tag{opacity:0; animation:hero-in .8s cubic-bezier(.16,.84,.44,1) .9s forwards;}
 .hero-full-card{
 	position:relative; grid-column:1; z-index:2; align-self:center; justify-self:start;
 	display:flex; flex-direction:column; gap:0;
