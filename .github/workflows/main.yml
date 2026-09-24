@@ -1,0 +1,191 @@
+name: Main CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      # @vn-dylan/* nằm trên GitHub Packages (private) — CI dựng lại .npmrc từ secret để
+      # không phụ thuộc file .npmrc trong repo. Tạo Personal Access Token (classic) scope
+      # `read:packages` có quyền đọc org VN-Dylan, lưu vào repo secret VN_DYLAN_NPM_TOKEN.
+      # `node-linker=hoisted`: bắt buộc cho `output: standalone` — node_modules symlink của
+      # pnpm không đóng gói được vào artifact (Next tạo symlink tuyệt đối → chết khi rời máy build).
+      - name: Configure pnpm + GitHub Packages auth
+        run: |
+          {
+            echo "@vn-dylan:registry=https://npm.pkg.github.com"
+            echo "//npm.pkg.github.com/:_authToken=${VN_DYLAN_NPM_TOKEN}"
+            echo "node-linker=hoisted"
+          } > .npmrc
+        env:
+          VN_DYLAN_NPM_TOKEN: ${{ secrets.VN_DYLAN_NPM_TOKEN }}
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --config.node-linker=hoisted
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Prepare deploy artifact
+        run: |
+          mkdir -p deploy/app/.next
+          cp -R .next/standalone/. deploy/app/
+          cp -R .next/static deploy/app/.next/static
+          cp -R public deploy/app/public
+          # Artifact phải tự chứa: không còn symlink trỏ ra ngoài cây build (pnpm hoisted
+          # đã làm node_modules phẳng, nhưng chặn sớm nếu Next lại sinh symlink tuyệt đối).
+          test -f deploy/app/server.js
+          if find deploy/app -type l | grep -q .; then
+            echo "::error::deploy/app còn symlink — artifact không portable (kiểm tra node-linker)."
+            find deploy/app -type l -printf '%p -> %l\n' | head -50
+            exit 1
+          fi
+          cp compose.yaml deploy/compose.yaml
+
+      - name: Upload deploy artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kiettran-runtime
+          path: deploy/
+          if-no-files-found: error
+          include-hidden-files: true
+
+  deploy:
+    name: Deploy to VPS
+    needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    # Hai lần push liền nhau không được rsync chồng lên nhau.
+    concurrency:
+      group: deploy-kiettran
+      cancel-in-progress: false
+
+    env:
+      VPS_HOST: 103.72.97.160
+      VPS_PORT: 24700
+      VPS_PATH: /mnt/SourceCode/KietTranDesign
+      VPS_DATA_PATH: /mnt/SourceCode/KietTranDesign-data
+      SITE_DOMAIN: kiettran.info
+
+    steps:
+      - name: Download deploy artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: kiettran-runtime
+          path: deploy
+
+      - name: Start ssh-agent
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_KEY }}
+          SSH_PASSPHRASE: ${{ secrets.VPS_SSH_PASSPHRASE }}
+        run: |
+          eval "$(ssh-agent -s)"
+          echo "SSH_AUTH_SOCK=${SSH_AUTH_SOCK}" >> "${GITHUB_ENV}"
+          echo "SSH_AGENT_PID=${SSH_AGENT_PID}" >> "${GITHUB_ENV}"
+
+          mkdir -p ~/.ssh
+          printf '%s\n' "${SSH_PRIVATE_KEY}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+          cat > ~/.ssh/askpass.sh <<'EOF'
+          #!/bin/sh
+          printf '%s\n' "$SSH_PASSPHRASE"
+          EOF
+          chmod +x ~/.ssh/askpass.sh
+
+          DISPLAY=:0 \
+          SSH_ASKPASS="$HOME/.ssh/askpass.sh" \
+          SSH_ASKPASS_REQUIRE=force \
+          setsid -w ssh-add ~/.ssh/id_ed25519 </dev/null
+
+      - name: Trust VPS host key
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p "${VPS_PORT}" -H "${VPS_HOST}" >> ~/.ssh/known_hosts
+
+      - name: Prepare VPS directory
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -p "${VPS_PORT}" "${{ secrets.VPS_USER }}@${VPS_HOST}" \
+            "mkdir -p ${VPS_PATH} ${VPS_DATA_PATH}/next-cache"
+
+      - name: Sync runtime artifact to VPS
+        run: |
+          rsync -az --delete \
+            -e "ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -p ${VPS_PORT}" \
+            deploy/ "${{ secrets.VPS_USER }}@${VPS_HOST}:${VPS_PATH}/"
+
+      # Network `edge` dùng chung với stack Dylan.Plan (nginx bên đó proxy vào kiettran-app).
+      # Tạo idempotent để thứ tự deploy giữa hai repo không quan trọng.
+      - name: Deploy with Docker Compose
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -p "${VPS_PORT}" "${{ secrets.VPS_USER }}@${VPS_HOST}" "bash -s" "${VPS_PATH}" <<'EOF'
+          set -e
+          cd "$1"
+
+          docker network inspect edge >/dev/null 2>&1 || docker network create edge
+          docker compose up -d --force-recreate --remove-orphans
+          EOF
+
+      - name: Smoke test deployed app
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -p "${VPS_PORT}" "${{ secrets.VPS_USER }}@${VPS_HOST}" "bash -s" "${VPS_PATH}" "${SITE_DOMAIN}" <<'EOF'
+          set -e
+          cd "$1"
+          domain="$2"
+
+          # Đi qua nginx của Dylan.Plan ngay trên VPS. Dùng --resolve (không phải -H 'Host:')
+          # để :authority của HTTP/2 khớp domain, vì nginx routing theo host.
+          curl -k -fsS --compressed --retry 10 --retry-delay 3 --resolve "${domain}:443:127.0.0.1" "https://${domain}/" -o /tmp/kiettran-local.html
+          if ! grep -q 'Trần Quang Nhân Kiệt' /tmp/kiettran-local.html; then
+            echo "Local HTTPS endpoint did not return the site marker."
+            head -80 /tmp/kiettran-local.html
+            docker compose ps
+            docker compose logs --tail=100 app
+            exit 1
+          fi
+
+          # Ảnh phải qua được next/image optimizer (cần .next/cache ghi được).
+          code=$(curl -k -s -o /dev/null -w '%{http_code}' --retry 5 --retry-delay 3 --resolve "${domain}:443:127.0.0.1" "https://${domain}/_next/image?url=%2Fimages%2Fliving-terracotta.jpg&w=640&q=75")
+          if [ "$code" != "200" ]; then
+            echo "next/image optimizer expected 200, got ${code}."
+            docker compose logs --tail=100 app
+            exit 1
+          fi
+          EOF
+
+          curl -fsS --compressed --retry 10 --retry-delay 3 "https://${SITE_DOMAIN}/" -o /tmp/kiettran-public.html
+          if ! grep -q 'Trần Quang Nhân Kiệt' /tmp/kiettran-public.html; then
+            echo "Public HTTPS endpoint did not return the site marker."
+            head -80 /tmp/kiettran-public.html
+            exit 1
+          fi
+
+      - name: Show Docker Compose diagnostics
+        if: failure()
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -p "${VPS_PORT}" "${{ secrets.VPS_USER }}@${VPS_HOST}" "cd ${VPS_PATH} && docker compose ps && docker compose logs --tail=100"
