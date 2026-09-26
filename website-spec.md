@@ -81,7 +81,7 @@ Mỗi section (trừ Dự án — xem mục 4) bọc trong 1 `ScrollReveal` duy 
 **`BookingForm`** (`components/BookingForm.tsx`, client component): Họ tên, SĐT, Loại hình (select: Căn hộ/Nhà phố/Biệt thự/Khác), Khung giờ khảo sát, nút "Gửi yêu cầu tư vấn". `onSubmit` hiện tại chỉ `preventDefault()` — **chưa nối API/email thật**.
 
 ### 3.6 Footer — `footer.site`
-4 cột (2 cột ≤760px): brand (logo-mark + tên, style ngang — khác kiểu lockup dọc của header), Liên hệ, Điều hướng (Dịch vụ/Quy trình/Dự án), Theo dõi (Facebook/Instagram/Pinterest — href `#`, placeholder). Dòng cuối: copyright + nhãn `PROTOTYPE — v0.4`.
+4 cột (2 cột ≤760px): brand (logo-mark + tên, style ngang — khác kiểu lockup dọc của header), Liên hệ, Điều hướng (Dịch vụ/Quy trình/Dự án), Theo dõi (Facebook/Instagram/Pinterest — href `#`, placeholder). Dòng cuối: copyright.
 
 ## 4. Section "Dự án" — chi tiết (`components/ProjectsList.tsx`, client component)
 
@@ -129,4 +129,3 @@ Mỗi section (trừ Dự án — xem mục 4) bọc trong 1 `ScrollReveal` duy 
 2. **`BookingForm`** chưa gọi API thật (chỉ `preventDefault`) — cần nối endpoint gửi lead khi có backend.
 3. **`hero-pager`** trên hero là số trang tĩnh, chưa nối với slider ảnh nền hero thật (hero hiện chỉ có 1 ảnh, không đổi khi bấm số 02–05).
 4. Social links ở footer (Facebook/Instagram/Pinterest) đang là placeholder `#`.
-5. Nhãn `PROTOTYPE — v0.4` ở footer xác nhận site đang ở giai đoạn dựng bản mẫu, chưa phải bản phát hành.

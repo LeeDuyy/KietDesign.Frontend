@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Montserrat } from "next/font/google";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 // Matches the wordmark font declared in the brand logo (public/logos/logo-full.svg: "Montserrat, Poppins").
@@ -22,9 +23,23 @@ const monoFont = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-	title: "Trần Quang Nhân Kiệt — Architecture & Design",
-	description:
-		"Studio kiến trúc và thiết kế nội thất trọn gói cho căn hộ, nhà phố, biệt thự và mặt bằng thương mại tại TP. Hồ Chí Minh.",
+	metadataBase: new URL(SITE_URL),
+	title: SITE_TITLE,
+	description: SITE_DESCRIPTION,
+	alternates: { canonical: "/" },
+	openGraph: {
+		type: "website",
+		locale: "vi_VN",
+		url: "/",
+		siteName: SITE_NAME,
+		title: SITE_TITLE,
+		description: SITE_DESCRIPTION,
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: SITE_TITLE,
+		description: SITE_DESCRIPTION,
+	},
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

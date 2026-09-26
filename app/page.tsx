@@ -346,9 +346,7 @@ export default function Home() {
 					</div>
 				</div>
 				<div className="foot-bottom">
-					<span>© 2026 Trần Quang Nhân Kiệt — Architecture &amp; Design. TP.HCM.</span>
-					<span className="mono">PROTOTYPE — v0.4</span>
-				</div>
+					<span>© 2026 Trần Quang Nhân Kiệt — Architecture &amp; Design. TP.HCM.</span>				</div>
 			</footer>
 
 			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
