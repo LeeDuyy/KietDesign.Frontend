@@ -422,6 +422,19 @@ section{padding-block:clamp(2.6rem,5vw,4.5rem);}
 .faq summary::after{content:"+"; font-family:var(--dyl-font-mono); color:var(--dyl-primary-deep); font-size:1.2rem; flex:none;}
 .faq details[open] summary::after{content:"–";}
 .faq p{color:var(--dyl-text-muted); margin:.8rem 0 0;}
+/* Mở/đóng mượt: trình duyệt hỗ trợ ::details-content + interpolate-size thì trượt chiều cao và mờ dần;
+   trình duyệt cũ hơn vẫn mở/đóng tức thì như <details> mặc định. */
+.faq details{interpolate-size:allow-keywords;}
+.faq details::details-content{
+	block-size:0; opacity:0; overflow:hidden;
+	transition:block-size .35s ease, opacity .3s ease, content-visibility .35s allow-discrete;
+}
+.faq details[open]::details-content{block-size:auto; opacity:1;}
+.faq summary::after{transition:transform .3s ease;}
+.faq details[open] summary::after{transform:rotate(180deg);}
+@media (prefers-reduced-motion:reduce){
+	.faq details::details-content, .faq summary::after{transition:none;}
+}
 
 /* ---------- footer ---------- */
 footer.site{border-top:1px solid var(--dyl-border); padding-block:clamp(2rem,4vw,3rem); margin-top:1rem;}
