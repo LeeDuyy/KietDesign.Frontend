@@ -8,3 +8,5 @@ sh.exe.stackdump
 dev.log
 Resources/
 tsconfig.tsbuildinfo
+.npmrc
+.ssr-kit.env
