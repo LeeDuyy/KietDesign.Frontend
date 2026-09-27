@@ -1,27 +1,10 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Montserrat } from "next/font/google";
 import { getSiteContent } from "@/lib/site-content";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL } from "@/lib/site";
+// Montserrat (khớp wordmark trong logo), Inter, JetBrains Mono: tự lưu ở public/fonts thay vì next/font/google,
+// vì build trên CI từng lỗi khi tải font từ Google ("An error occurred in `next/font`").
+import "./fonts.css";
 import "./globals.css";
-
-// Matches the wordmark font declared in the brand logo (public/logos/logo-full.svg: "Montserrat, Poppins").
-const displayFont = Montserrat({
-	subsets: ["vietnamese", "latin"],
-	weight: ["500", "600", "700", "800"],
-	variable: "--font-display",
-});
-
-const sansFont = Inter({
-	subsets: ["vietnamese", "latin"],
-	weight: ["400", "500", "600", "700"],
-	variable: "--font-sans",
-});
-
-const monoFont = JetBrains_Mono({
-	subsets: ["vietnamese", "latin"],
-	weight: ["500"],
-	variable: "--font-mono",
-});
 
 export async function generateMetadata(): Promise<Metadata> {
 	// Favicon do chủ studio đặt ở trang quản trị; chưa đặt thì dùng public/icon.svg + favicon.ico mặc định.
@@ -59,7 +42,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
-		<html lang="vi" className={`${displayFont.variable} ${sansFont.variable} ${monoFont.variable}`}>
+		<html lang="vi">
 			<body>{children}</body>
 		</html>
 	);
