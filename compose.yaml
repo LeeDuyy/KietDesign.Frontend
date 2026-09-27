@@ -9,6 +9,8 @@ services:
       PORT: 3000
       HOSTNAME: 0.0.0.0
       NEXT_TELEMETRY_DISABLED: "1"
+      # API công khai của trang quản trị (nội dung, ảnh, liên hệ). Trang quản trị lỗi/không trả lời -> landing dùng nội dung dự phòng.
+      ADMIN_API_URL: https://admin.kiettran.info
     volumes:
       - ./app:/app:ro
       # Ảnh dự án nặng 1-8MB đi qua next/image -> optimizer ghi cache vào .next/cache.

@@ -50,6 +50,9 @@ jobs:
 
       - name: Build
         run: pnpm run build
+        env:
+          # Đọc lúc build: khai báo origin ảnh cho next/image (remotePatterns) và render trang bằng nội dung thật.
+          ADMIN_API_URL: https://admin.kiettran.info
 
       - name: Prepare deploy artifact
         run: |

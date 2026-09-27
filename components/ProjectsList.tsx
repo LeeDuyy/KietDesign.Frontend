@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState, type CSSProperties } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import ScrollReveal from "@/components/ScrollReveal";
 import type { Project } from "@/lib/projects";
 
@@ -74,20 +75,23 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
 								</span>
 							</button>
 							<div className="pz-content">
-								<p className="mono pz-code">{project.code} · {project.year}</p>
-								<h3>{project.title}</h3>
-								<p className="pz-loc">{project.location}</p>
-								<p className="pz-desc">{project.desc}</p>
-								<div className="pz-stats">
-									<div>
-										<span className="mono label">{project.stat1.label}</span>
-										<span>{project.stat1.value}</span>
+								<p className="mono pz-code">{[project.code, project.year].filter(Boolean).join(" · ")}</p>
+								<h3><Link href={`/du-an/${project.slug}`}>{project.title}</Link></h3>
+								{(project.location ?? project.category) && <p className="pz-loc">{project.location ?? project.category}</p>}
+								{project.desc && <p className="pz-desc">{project.desc}</p>}
+								{project.stat1 && project.stat2 && (
+									<div className="pz-stats">
+										{[project.stat1, project.stat2].map((stat) => (
+											<div key={stat.label}>
+												<span className="mono label">{stat.label}</span>
+												<span>{stat.value}</span>
+											</div>
+										))}
 									</div>
-									<div>
-										<span className="mono label">{project.stat2.label}</span>
-										<span>{project.stat2.value}</span>
-									</div>
-								</div>
+								)}
+								<Link className="pz-more" href={`/du-an/${project.slug}`}>
+									Xem chi tiết dự án <span aria-hidden="true">→</span>
+								</Link>
 							</div>
 						</article>
 					</ScrollReveal>

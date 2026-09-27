@@ -1,15 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { NAV_LINKS } from "@/lib/nav";
 
-const LINKS = [
-	{ href: "/", label: "Trang chủ" },
-	{ href: "#ve-chung-toi", label: "Giới thiệu" },
-	{ href: "#dich-vu", label: "Dịch vụ" },
-	{ href: "#du-an", label: "Dự án" },
-	{ href: "#", label: "Tin tức" },
-	{ href: "#dat-lich", label: "Liên hệ" },
-];
+const LINKS = NAV_LINKS;
 
 export default function MobileNav() {
 	const [open, setOpen] = useState(false);
@@ -38,7 +32,7 @@ export default function MobileNav() {
 				</ul>
 				<a
 					className="btn btn-primary"
-					href="#dat-lich"
+					href="/#dat-lich"
 					tabIndex={open ? 0 : -1}
 					style={{ transitionDelay: open ? `${LINKS.length * 0.04 + 0.05}s` : "0s" }}
 					onClick={() => setOpen(false)}

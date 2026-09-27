@@ -2,23 +2,28 @@ export type Slide = { src: string; alt: string };
 
 export type Stat = { label: string; value: string };
 
+// Ảnh + tên + loại hình là dữ liệu bắt buộc (API site-media chỉ có bấy nhiêu);
+// phần còn lại chỉ có ở nội dung dự phòng bên dưới nên là tuỳ chọn.
 export type Project = {
 	code: string;
+	/** Đường dẫn trang chi tiết: /du-an/<slug> */
+	slug: string;
 	title: string;
-	meta: string;
-	desc: string;
-	chips: string[];
+	category: string | null;
 	slides: Slide[];
-	year: string;
-	location: string;
-	category: string;
-	stat1: Stat;
-	stat2: Stat;
+	meta?: string;
+	desc?: string;
+	chips?: string[];
+	year?: string;
+	location?: string;
+	stat1?: Stat;
+	stat2?: Stat;
 };
 
-export const projects: Project[] = [
+export const fallbackProjects: Project[] = [
 	{
 		code: "DA.01",
+		slug: "can-ho-anh-hoang",
 		title: "Căn hộ Anh Hoàng",
 		meta: "92M² · QUẬN 7 · 6 TUẦN THI CÔNG",
 		desc: "Phong cách ấm áp đương đại — gỗ óc chó, mảng tường đất nung và điểm nhấn cam được lặp lại xuyên suốt từ phòng khách đến phòng làm việc và phòng tắm.",
@@ -37,6 +42,7 @@ export const projects: Project[] = [
 	},
 	{
 		code: "DA.02",
+		slug: "can-ho-anh-son",
 		title: "Căn hộ Anh Sơn",
 		meta: "78M² · QUẬN 2 · 5 TUẦN THI CÔNG",
 		desc: "Tối giản, ấm bằng chất liệu thay vì màu sắc — ghế bành mù tạt làm điểm nhấn giữa tông da đen và tường xanh rêu, có hẳn một góc piano riêng cho gia chủ yêu nhạc.",
@@ -54,6 +60,7 @@ export const projects: Project[] = [
 	},
 	{
 		code: "DA.03",
+		slug: "khu-nghi-duong-phan-thiet",
 		title: "Khu nghỉ dưỡng Phan Thiết",
 		meta: "VILLA SÂN VƯỜN · PHAN THIẾT",
 		desc: "Cụm villa trệt phong cách Địa Trung Hải — tường trát thô trắng, mái lá cọ và sân vườn nhiệt đới quây quanh hồ bơi chung.",
@@ -71,6 +78,7 @@ export const projects: Project[] = [
 	},
 	{
 		code: "DA.04",
+		slug: "ca-phe-g-long",
 		title: "Cà phê G'Long",
 		meta: "MẶT BẰNG F&B · TP.HCM · 10 TUẦN THI CÔNG",
 		desc: "Không gian cà phê tân cổ điển ấm áp — quầy pha chế gỗ sẫm, ghế bọc nhung đỏ và kệ trưng bày mở, thiết kế để quán vừa đón khách nhanh vừa giữ chân khách ngồi lâu.",
@@ -88,6 +96,7 @@ export const projects: Project[] = [
 	},
 	{
 		code: "DA.05",
+		slug: "nha-pho-anh-tuyen",
 		title: "Nhà phố Anh Tuyến",
 		meta: "NHÀ PHỐ 3 TẦNG · QUẬN 9 · 7 TUẦN THI CÔNG",
 		desc: "Nhà cho gia đình nhiều thế hệ — phòng khách gỗ chạm truyền thống dành cho ông bà, bếp mở hiện đại cạnh cầu thang cho sinh hoạt chung, và phòng riêng đầy màu sắc cho các con.",

@@ -40,7 +40,7 @@ body{
 }
 img{max-width:100%; display:block;}
 a{color:inherit;}
-section[id]{scroll-margin-top:84px;}
+section[id]{scroll-margin-top:var(--header-h);}
 
 /* ---------- scroll reveal (IntersectionObserver-driven, see components/ScrollReveal.tsx) ---------- */
 .reveal{opacity:0; transform:translateY(28px); transition:opacity .7s ease, transform .7s ease; will-change:opacity, transform;}
@@ -74,6 +74,9 @@ h1,h2,h3{font-family:var(--dyl-font-display); font-weight:800; text-wrap:balance
 }
 
 /* ---------- header (bleeds full viewport width, like hero/image-band) ---------- */
+/* Khung logo được cắt sát nét vẽ (BrandLogo.tsx) nên --logo-h là chiều cao logo nhìn thấy thật; chiều rộng tự theo tỉ lệ. */
+:root{--logo-h:96px; --header-h:128px;}
+@media (max-width:767px){:root{--logo-h:56px; --header-h:84px;}}
 header.site{
 	position:sticky; top:0; z-index:30; background:rgba(255,255,255,.9); backdrop-filter:blur(8px);
 	border-bottom:1px solid var(--dyl-border);
@@ -81,14 +84,19 @@ header.site{
 }
 nav{
 	position:relative; display:flex; align-items:center; gap:40px;
-	min-height:88px; width:100%;
+	min-height:var(--header-h); width:100%;
 }
 .brand{display:flex; align-items:center; gap:.85rem; font-family:var(--dyl-font-display); font-weight:600; font-size:1.05rem; line-height:1; letter-spacing:.3px;}
 .brand img{display:block; width:auto;}
 .brand-text{display:flex; flex-direction:column;}
 .brand small{display:block; font-family:var(--dyl-font-mono); font-weight:500; font-size:.6rem; letter-spacing:.16em; color:var(--dyl-text-muted); margin-top:4px;}
 .brand-logo{display:block; margin-right:auto;}
-.brand-logo img{display:block; height:100px; width:auto;}
+.brand-logo-frame{position:relative; display:block; height:var(--logo-h); overflow:hidden; opacity:0; transition:opacity .25s ease;}
+.brand-logo-frame.is-ready{opacity:1;}
+.brand-logo-frame img{position:absolute; display:block; max-width:none;}
+.brand-footer{gap:1.1rem;}
+.brand-footer .brand-logo-frame{height:88px; flex:none;}
+@media (max-width:767px){.brand-footer .brand-logo-frame{height:64px;}}
 .nav-links{display:flex; gap:32px; list-style:none; margin:0; padding:0; font-size:13px; font-weight:400;}
 .nav-links a{text-decoration:none; color:var(--dyl-ink); padding-bottom:6px; border-bottom:1px solid transparent; transition:color .2s ease, border-color .2s ease;}
 .nav-links a:hover{color:var(--dyl-primary-deep);}
@@ -131,17 +139,16 @@ nav{
 @media (max-width:767px){
 	.nav-links{display:none;}
 	.mobile-nav{display:block;}
-	nav{min-height:72px; justify-content:center; gap:0;}
+	nav{justify-content:center; gap:0;}
 	.brand-logo{margin-right:0;}
-	.brand-logo img{height:66px;}
-	.mobile-nav-toggle{position:absolute; right:0; top:50%; transform:translateY(-50%);}
+		.mobile-nav-toggle{position:absolute; right:0; top:50%; transform:translateY(-50%);}
 }
 
 /* ---------- hero (desktop: 40/60 grid, text col + masked image col; mobile: text on cream + masked image right) ---------- */
 .hero-full{
 	position:relative; margin-inline:calc(-1 * var(--gutter)); overflow:hidden;
 	display:grid; grid-template-columns:40% 60%;
-	min-height:max(560px, calc(100vh - 88px));
+	min-height:max(560px, calc(100vh - var(--header-h)));
 }
 .hero-full img{object-fit:cover;}
 /* Hero photo entrance: hidden until decoded (HeroImage adds .hero-img-in on load), then a slow settle. */
@@ -199,7 +206,7 @@ nav{
 }
 @media (max-width:767px){
 	.hero-full{
-		display:block; height:auto; min-height:calc(100svh - 72px); overflow:hidden;
+		display:block; height:auto; min-height:calc(100svh - var(--header-h)); overflow:hidden;
 		padding:32px 24px 88px;
 	}
 	.hero-media{
@@ -391,11 +398,19 @@ section{padding-block:clamp(2.6rem,5vw,4.5rem);}
 .booking-card .mono{color:var(--dyl-primary-mild); font-size:.75rem;}
 .field{display:flex; flex-direction:column; gap:.35rem; margin-bottom:.9rem;}
 .field label{font-size:.82rem; color:var(--dyl-primary-mild);}
-.field input, .field select{
+.field input, .field select, .field textarea{
 	background:var(--dyl-ink); border:1px solid var(--dyl-ink-700); color:#fff; border-radius:var(--dyl-radius-md);
 	padding:.6rem .75rem; font-family:var(--dyl-font-sans); font-size:.92rem;
 }
-.field input:focus, .field select:focus{border-color:var(--dyl-primary);}
+.field input:focus, .field select:focus, .field textarea:focus{border-color:var(--dyl-primary);}
+.field textarea{resize:vertical; min-height:3.2rem;}
+.field [aria-invalid="true"]{border-color:#e5484d;}
+.field-error{font-size:.78rem; color:#ff8a8f;}
+.hp-field{position:absolute; left:-10000px; width:1px; height:1px; overflow:hidden;}
+.btn:disabled{opacity:.6; cursor:progress; transform:none; box-shadow:none;}
+.form-status{margin:.8rem 0 0; min-height:1.2em; font-size:.85rem; line-height:1.5;}
+.form-status.is-success{color:#7bd88f;}
+.form-status.is-error{color:#ff8a8f;}
 .row2{display:grid; grid-template-columns:1fr 1fr; gap:.9rem;}
 @media (max-width:860px){ .cta-band{grid-template-columns:1fr;} .row2{grid-template-columns:1fr;} }
 
@@ -415,5 +430,59 @@ footer.site{border-top:1px solid var(--dyl-border); padding-block:clamp(2rem,4vw
 .foot-grid ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55rem; font-size:.9rem; color:var(--dyl-text-muted);}
 .foot-grid a{text-decoration:none;}
 .foot-grid a:hover{color:var(--dyl-primary-deep);}
+.foot-grid .social-link{display:inline-flex; align-items:center; gap:.55rem;}
+.social-icon{flex:none;}
 .foot-bottom{max-width:1200px; margin-inline:auto; display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin-top:2.2rem; padding-top:1.2rem; border-top:1px solid var(--dyl-border); font-size:.8rem; color:var(--dyl-text-faint);}
 @media (max-width:760px){ .foot-grid{grid-template-columns:1fr 1fr;} }
+
+/* ---------- bong bóng Zalo (góc dưới phải, cố định) ---------- */
+.zalo-bubble{
+	position:fixed; right:16px; bottom:18px; z-index:20; width:50px; height:50px; border-radius:50%;
+	display:flex; align-items:center; justify-content:center; text-decoration:none;
+	background:#0068ff; color:#fff; font-family:var(--dyl-font-sans); font-weight:700; font-size:.78rem; letter-spacing:.01em;
+	box-shadow:0 6px 18px rgba(0,104,255,.35), 0 2px 6px rgba(0,0,0,.18);
+	transition:transform .2s ease, box-shadow .2s ease;
+}
+.zalo-bubble::before{
+	content:""; position:absolute; inset:0; border-radius:50%; border:2px solid #0068ff; opacity:0;
+	animation:zalo-pulse 2.6s ease-out infinite;
+}
+.zalo-bubble:hover{transform:scale(1.06); box-shadow:0 8px 22px rgba(0,104,255,.45), 0 2px 6px rgba(0,0,0,.2);}
+.zalo-bubble:focus-visible{outline:3px solid #fff; outline-offset:2px; box-shadow:0 0 0 5px #0068ff;}
+@keyframes zalo-pulse{0%{transform:scale(1); opacity:.55;} 70%,100%{transform:scale(1.5); opacity:0;}}
+@media (prefers-reduced-motion:reduce){ .zalo-bubble::before{animation:none;} .zalo-bubble{transition:none;} }
+@media (max-width:767px){ .zalo-bubble{right:12px; bottom:14px; width:48px; height:48px;} }
+
+/* ---------- trang chi tiết dự án (/du-an/[slug]) ---------- */
+.pz-content h3 a{text-decoration:none;}
+.pz-content h3 a:hover{color:var(--dyl-primary-deep);}
+.pz-more{display:inline-block; margin-top:1.3rem; font-size:.88rem; font-weight:600; color:var(--dyl-primary-deep); text-decoration:none; border-bottom:1px solid transparent;}
+.pz-more:hover{border-bottom-color:currentColor;}
+
+.project-page{padding-bottom:clamp(2.6rem,5vw,4.5rem);}
+.crumbs{display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; padding-block:1.4rem 1.6rem; font-size:.8rem; color:var(--dyl-text-muted);}
+.crumbs a{text-decoration:none;}
+.crumbs a:hover{color:var(--dyl-primary-deep);}
+.crumbs [aria-current]{color:var(--dyl-text);}
+.pp-head{margin-bottom:1.6rem;}
+.pp-head h1{font-size:clamp(2rem,4.6vw,3.4rem); text-transform:uppercase; margin-bottom:.4rem;}
+.pp-cover{position:relative; aspect-ratio:16/9; overflow:hidden; border-radius:var(--dyl-radius-lg); background:var(--dyl-border);}
+.pp-cover img{object-fit:cover;}
+.pp-body{display:grid; gap:1.4rem; max-width:64ch; margin:2.2rem 0 0;}
+.pp-desc{margin:0; font-size:1.05rem; color:var(--dyl-text-muted);}
+.pp-chips{list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:.5rem;}
+.pp-chips li{font-size:.78rem; padding:.3rem .8rem; border:1px solid var(--dyl-border-strong); border-radius:var(--dyl-radius-full); color:var(--dyl-text-muted);}
+.pp-gallery{display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:2.2rem;}
+.pp-gallery figure{position:relative; margin:0; aspect-ratio:4/3; overflow:hidden; border-radius:var(--dyl-radius-md); background:var(--dyl-border);}
+.pp-gallery figure img{object-fit:cover;}
+.pp-gallery figure:only-child, .pp-gallery figure:nth-child(3):last-child{grid-column:1 / -1; aspect-ratio:16/9;}
+.pp-cta{display:flex; align-items:center; justify-content:space-between; gap:1.5rem; flex-wrap:wrap; margin-top:clamp(2.4rem,5vw,3.6rem); padding:clamp(1.4rem,3vw,2.2rem); background:var(--dyl-ink); color:#fff; border-radius:var(--dyl-radius-lg);}
+.pp-cta h2{font-size:clamp(1.3rem,2.6vw,1.8rem); text-transform:uppercase; color:#fff;}
+.pp-cta p{margin:.4rem 0 0; color:var(--dyl-primary-mild);}
+.pp-pager{display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:2rem; padding-top:1.4rem; border-top:1px solid var(--dyl-border);}
+.pp-pager a{display:flex; flex-direction:column; gap:.3rem; text-decoration:none;}
+.pp-pager a:last-child{text-align:right;}
+.pp-pager .mono{font-size:.72rem; color:var(--dyl-text-faint);}
+.pp-pager b{font-family:var(--dyl-font-display); font-weight:700;}
+.pp-pager a:hover b{color:var(--dyl-primary-deep);}
+@media (max-width:640px){ .pp-gallery{grid-template-columns:1fr;} .pp-gallery figure:only-child, .pp-gallery figure:nth-child(3):last-child{aspect-ratio:4/3;} }
