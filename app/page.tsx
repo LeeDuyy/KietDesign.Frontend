@@ -30,7 +30,7 @@ function buildJsonLd({ contact }: SiteContent) {
 
 export default async function Home() {
 	const content = await getSiteContent();
-	const { media, projects, services, processSteps, faqs, booking, contact } = content;
+	const { media, projects, services, processSteps, faqs, booking, contact, stats } = content;
 	const jsonLd = buildJsonLd(content);
 	const bookingEndpoint = adminApiUrl ? `${adminApiUrl}/api/public/booking-request` : null;
 	const heroTarget = projects.length > 0 ? "#du-an" : services.length > 0 ? "#dich-vu" : "#dat-lich";
@@ -39,7 +39,7 @@ export default async function Home() {
 		<>
 			<div className="ruler" />
 
-			<SiteHeader logo={media.logoHeader} current="home" />
+			<SiteHeader logo={media.logoHeader} logoMobile={media.logoHeaderMobile} current="home" />
 
 			<section className="hero-full">
 				<div className="hero-media">
@@ -95,14 +95,15 @@ export default async function Home() {
 			</ScrollReveal>
 
 			<main>
-				<ScrollReveal>
-					<section className="stats" aria-label="Số liệu studio">
-						<div className="stat"><b>120+</b><span>dự án đã hoàn thiện</span></div>
-						<div className="stat"><b>8 năm</b><span>kinh nghiệm thiết kế</span></div>
-						<div className="stat"><b>35 ngày</b><span>trung bình khảo sát → concept</span></div>
-						<div className="stat"><b>4.9/5</b><span>đánh giá từ khách hàng</span></div>
-					</section>
-				</ScrollReveal>
+				{stats.length > 0 && (
+					<ScrollReveal>
+						<section className="stats" aria-label="Số liệu studio" style={{ "--stat-count": stats.length } as React.CSSProperties}>
+							{stats.map((s) => (
+								<div className="stat" key={`${s.value}-${s.label}`}><b>{s.value}</b><span>{s.label}</span></div>
+							))}
+						</section>
+					</ScrollReveal>
+				)}
 
 				<ScrollReveal>
 				<section id="ve-chung-toi">

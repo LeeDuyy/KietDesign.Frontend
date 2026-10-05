@@ -1,4 +1,4 @@
-import { getConsulting, getContactInfo, getSiteMedia, type ApiContactInfo, type ApiSiteMedia } from "@/lib/admin-api";
+import { getConsulting, getContactInfo, getHomeStats, getSiteMedia, type ApiContactInfo, type ApiSiteMedia } from "@/lib/admin-api";
 import {
 	fallbackBooking,
 	fallbackContact,
@@ -6,6 +6,7 @@ import {
 	fallbackMedia,
 	fallbackProcessSteps,
 	fallbackServices,
+	fallbackStats,
 } from "@/lib/fallback-content";
 import { fallbackProjects, type Project } from "@/lib/projects";
 import { SOCIAL_DEFAULTS } from "@/lib/site";
@@ -70,7 +71,7 @@ function projectsFromApi(items: ApiSiteMedia["projects"]): Project[] {
 				.map((img, n) => ({ src: img.url, alt: `${label}, ảnh ${n + 1}` }));
 			const stats = [
 				category ? { label: "Loại hình", value: category } : null,
-				duration ? { label: "Thời gian thi công", value: duration } : null,
+				duration ? { label: "Thời gian thực hiện", value: duration } : null,
 			].filter((stat): stat is { label: string; value: string } => stat !== null);
 
 			return {
@@ -91,7 +92,12 @@ function projectsFromApi(items: ApiSiteMedia["projects"]): Project[] {
 
 export async function getSiteContent() {
 	// fetch cùng URL trong một lượt render được Next dedupe, nên layout và page gọi lại không tốn thêm request.
-	const [media, consulting, contact] = await Promise.all([getSiteMedia(), getConsulting(), getContactInfo()]);
+	const [media, consulting, contact, homeStats] = await Promise.all([
+		getSiteMedia(),
+		getConsulting(),
+		getContactInfo(),
+		getHomeStats(),
+	]);
 
 	const brandAlt = "Trần Quang Nhân Kiệt — Architecture & Design";
 	const phone = cleanText(contact?.phone) ?? (contact ? null : fallbackContact.phone);
@@ -122,6 +128,8 @@ export async function getSiteContent() {
 					hero: { src: media.hero.url, alt: `Công trình tiêu biểu — ${brandAlt}` },
 					imageBand: { src: media.imageBand.url, alt: `Công trình nổi bật — ${brandAlt}` },
 					logoHeader: media.logos.header.url,
+					// null khi chưa đặt: mobile dùng lại logo header.
+					logoHeaderMobile: media.logos.headerMobile?.url ?? null,
 					logoFooter: media.logos.footer.url,
 					favicon: media.logos.favicon?.url ?? null,
 				}
@@ -131,6 +139,8 @@ export async function getSiteContent() {
 		processSteps: consulting?.processSteps ?? fallbackProcessSteps,
 		faqs: consulting?.faqs ?? fallbackFaqs,
 		booking: consulting?.booking ?? fallbackBooking,
+		// Admin chỉ trả các ô đang áp dụng (có thể rỗng → ẩn dải số liệu); chỉ khi API lỗi mới dùng dự phòng.
+		stats: homeStats?.stats ?? fallbackStats,
 		contact: {
 			phone,
 			telHref: phone ? toTelHref(phone) : null,

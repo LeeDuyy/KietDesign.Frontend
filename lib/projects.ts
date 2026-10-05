@@ -32,7 +32,7 @@ export const fallbackProjects: Project[] = [
 		location: "Quận 7, TP.HCM",
 		category: "Căn hộ",
 		stat1: { label: "Diện tích", value: "92 m²" },
-		stat2: { label: "Thời gian thi công", value: "6 tuần" },
+		stat2: { label: "Thời gian thực hiện", value: "6 tuần" },
 		slides: [
 			{ src: "/images/living-terracotta.jpg", alt: "Phòng khách tông đất nung, kệ gỗ mở, căn hộ Anh Hoàng quận 7" },
 			{ src: "/images/bedroom-skyline.jpg", alt: "Phòng ngủ master view thành phố, tường bê tông mài ấm, căn hộ Anh Hoàng" },
@@ -51,7 +51,7 @@ export const fallbackProjects: Project[] = [
 		location: "Quận 2, TP.HCM",
 		category: "Căn hộ",
 		stat1: { label: "Diện tích", value: "78 m²" },
-		stat2: { label: "Thời gian thi công", value: "5 tuần" },
+		stat2: { label: "Thời gian thực hiện", value: "5 tuần" },
 		slides: [
 			{ src: "/images/living-mustard-chair.jpg", alt: "Phòng khách ghế bành vàng mù tạt, sofa da đen, căn hộ Anh Sơn quận 2" },
 			{ src: "/images/dining-green.jpg", alt: "Bàn ăn ghế da nâu, tường xanh rêu, bếp mở, căn hộ Anh Sơn" },
@@ -87,7 +87,7 @@ export const fallbackProjects: Project[] = [
 		location: "TP. Hồ Chí Minh",
 		category: "Thương mại",
 		stat1: { label: "Loại hình", value: "F&B / thương mại" },
-		stat2: { label: "Thời gian thi công", value: "10 tuần" },
+		stat2: { label: "Thời gian thực hiện", value: "10 tuần" },
 		slides: [
 			{ src: "/images/cafe-storefront.jpg", alt: "Mặt tiền quán cà phê G'Long, bảng hiệu vàng, sân hiên trồng cây" },
 			{ src: "/images/cafe-dining-1.jpg", alt: "Khu vực bàn ghế cà phê, ghế bọc nhung đỏ, kệ gỗ trưng bày sách và cà phê" },
@@ -105,7 +105,7 @@ export const fallbackProjects: Project[] = [
 		location: "Quận 9, TP.HCM",
 		category: "Nhà phố",
 		stat1: { label: "Quy mô", value: "Nhà phố 3 tầng" },
-		stat2: { label: "Thời gian thi công", value: "7 tuần" },
+		stat2: { label: "Thời gian thực hiện", value: "7 tuần" },
 		slides: [
 			{ src: "/images/tuyen-formal-room.jpg", alt: "Phòng khách truyền thống gỗ chạm, bàn thờ gia tiên, nhà phố Anh Tuyến quận 9" },
 			{ src: "/images/tuyen-kitchen-stair.jpg", alt: "Bếp mở hiện đại cạnh cầu thang, tủ gỗ, mảng tường vàng, nhà phố Anh Tuyến" },

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type TouchEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -36,6 +36,24 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
 		setDir(i >= slideIndex ? 1 : -1);
 		setSlideIndex(i);
 	}, [slideIndex]);
+
+	// Vuốt ngang để chuyển ảnh: bỏ qua cử chỉ ngắn hoặc thiên về chiều dọc (người dùng đang cuộn).
+	const touchStart = useRef<{ x: number; y: number } | null>(null);
+	const onTouchStart = (e: TouchEvent<HTMLDivElement>) => {
+		const t = e.touches[0];
+		touchStart.current = { x: t.clientX, y: t.clientY };
+	};
+	const onTouchEnd = (e: TouchEvent<HTMLDivElement>) => {
+		const start = touchStart.current;
+		touchStart.current = null;
+		if (!start) return;
+		const t = e.changedTouches[0];
+		const dx = t.clientX - start.x;
+		const dy = t.clientY - start.y;
+		if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+		if (dx < 0) next();
+		else prev();
+	};
 
 	useEffect(() => {
 		if (openIndex === null) return;
@@ -107,13 +125,18 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
 						<button type="button" className="lightbox-nav prev" onClick={prev} aria-label="Ảnh trước">
 							‹
 						</button>
-						<div className="lightbox-media" style={{ "--dir": dir } as CSSProperties}>
+						<div
+								className="lightbox-media"
+								style={{ "--dir": dir } as CSSProperties}
+								onTouchStart={onTouchStart}
+								onTouchEnd={onTouchEnd}
+							>
 							<Image
 								key={activeProject.slides[slideIndex].src}
 								src={activeProject.slides[slideIndex].src}
 								alt={activeProject.slides[slideIndex].alt}
 								fill
-								sizes="90vw"
+								sizes="100vw"
 								priority
 							/>
 						</div>

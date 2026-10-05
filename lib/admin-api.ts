@@ -14,7 +14,7 @@ export type ApiImage = { url: string };
 export type ApiSiteMedia = {
 	hero: ApiImage;
 	imageBand: ApiImage;
-	logos: { header: ApiImage; footer: ApiImage; favicon: ApiImage | null };
+	logos: { header: ApiImage; headerMobile?: ApiImage | null; footer: ApiImage; favicon: ApiImage | null };
 	projects: {
 		id: string;
 		slug: string;
@@ -48,6 +48,8 @@ export type ApiContactInfo = {
 	};
 };
 
+export type ApiHomeStats = { stats: { value: string; label: string }[] };
+
 async function getJson<T>(path: string): Promise<T | null> {
 	if (!BASE) return null;
 	try {
@@ -65,3 +67,4 @@ async function getJson<T>(path: string): Promise<T | null> {
 export const getSiteMedia = () => getJson<ApiSiteMedia>("site-media");
 export const getConsulting = () => getJson<ApiConsulting>("consulting");
 export const getContactInfo = () => getJson<ApiContactInfo>("contact-info");
+export const getHomeStats = () => getJson<ApiHomeStats>("home-stats");

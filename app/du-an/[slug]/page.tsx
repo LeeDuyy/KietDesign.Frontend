@@ -98,7 +98,7 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
 	return (
 		<>
 			<div className="ruler" />
-			<SiteHeader logo={media.logoHeader} current="projects" />
+			<SiteHeader logo={media.logoHeader} logoMobile={media.logoHeaderMobile} current="projects" />
 
 			<main className="project-page">
 				<nav className="crumbs" aria-label="Breadcrumb">

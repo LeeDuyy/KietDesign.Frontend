@@ -4,6 +4,7 @@ export const fallbackMedia = {
 	hero: { src: "/images/living-terracotta.jpg", alt: "Phòng khách căn hộ Anh Hoàng, tường đất nung, sofa da nâu, quận 7" },
 	imageBand: { src: "/images/resort-exterior.jpg", alt: "Phối cảnh biệt thự nghỉ dưỡng sân vườn, Phan Thiết" },
 	logoHeader: "/logos/logo-full.svg",
+	logoHeaderMobile: null as string | null,
 	logoFooter: "/logos/logo-mark.svg",
 	favicon: null as string | null,
 };
@@ -70,6 +71,13 @@ export const fallbackFaqs = [
 		question: "Có bảo hành sau khi bàn giao không?",
 		answer: "Có — bảo hành nội thất 24 tháng và hỗ trợ bảo trì sau bàn giao.",
 	},
+];
+
+export const fallbackStats = [
+	{ value: "120+", label: "dự án đã hoàn thiện" },
+	{ value: "8 năm", label: "kinh nghiệm thiết kế" },
+	{ value: "35 ngày", label: "trung bình khảo sát → concept" },
+	{ value: "4.9/5", label: "đánh giá từ khách hàng" },
 ];
 
 export const fallbackBooking = {
