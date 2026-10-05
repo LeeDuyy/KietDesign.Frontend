@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getSiteContent } from "@/lib/site-content";
-import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL } from "@/lib/site";
+import { OWNER_NAME, SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_TITLE, SITE_URL } from "@/lib/site";
 // Montserrat (khớp wordmark trong logo), Inter, JetBrains Mono: tự lưu ở public/fonts thay vì next/font/google,
 // vì build trên CI từng lỗi khi tải font từ Google ("An error occurred in `next/font`").
 import "./fonts.css";
@@ -11,8 +11,14 @@ export async function generateMetadata(): Promise<Metadata> {
 	const { media } = await getSiteContent();
 	return {
 		metadataBase: new URL(SITE_URL),
-		title: SITE_TITLE,
+		title: { default: SITE_TITLE, template: `%s | ${SITE_NAME}` },
 		description: SITE_DESCRIPTION,
+		keywords: SITE_KEYWORDS,
+		applicationName: SITE_NAME,
+		authors: [{ name: OWNER_NAME, url: SITE_URL }],
+		creator: OWNER_NAME,
+		publisher: SITE_NAME,
+		robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large" } },
 		alternates: { canonical: "/" },
 		openGraph: {
 			type: "website",

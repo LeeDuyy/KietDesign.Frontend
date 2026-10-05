@@ -7,25 +7,57 @@ import HeroImage from "@/components/HeroImage";
 import ScrollReveal from "@/components/ScrollReveal";
 import { adminApiUrl } from "@/lib/admin-api";
 import { getSiteContent, getSocialLinks, type SiteContent } from "@/lib/site-content";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { OWNER_ALIASES, OWNER_NAME, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 
 // Chỉ đưa vào JSON-LD những trường đã có dữ liệu thật — Google đọc thẳng khối này.
-function buildJsonLd({ contact }: SiteContent) {
+function buildJsonLd({ contact, media, faqs }: SiteContent) {
 	const sameAs = getSocialLinks(contact).flatMap((link) => (link.href ? [link.href] : []));
-	return {
-		"@context": "https://schema.org",
-		"@type": "HomeAndConstructionBusiness",
-		name: `${SITE_NAME} – Trần Quang Nhân Kiệt`,
+	const owner = {
+		"@type": "Person",
+		"@id": `${SITE_URL}/#owner`,
+		name: OWNER_NAME,
+		alternateName: OWNER_ALIASES,
+		jobTitle: "Kiến trúc sư, nhà thiết kế nội thất",
 		url: SITE_URL,
-		description: "Studio kiến trúc và thiết kế nội thất trọn gói tại TP. Hồ Chí Minh.",
+		worksFor: { "@id": `${SITE_URL}/#business` },
+		...(sameAs.length > 0 && { sameAs }),
+	};
+	const business = {
+		"@type": "HomeAndConstructionBusiness",
+		"@id": `${SITE_URL}/#business`,
+		name: `${SITE_NAME} – ${OWNER_NAME}`,
+		alternateName: [SITE_NAME, OWNER_NAME, ...OWNER_ALIASES, `${SITE_NAME} Kiệt Trần`],
+		url: SITE_URL,
+		description: SITE_DESCRIPTION,
 		areaServed: "TP. Hồ Chí Minh",
+		founder: { "@id": `${SITE_URL}/#owner` },
+		...(media.hero.src && { image: media.hero.src }),
+		...(media.logoHeader && { logo: media.logoHeader }),
 		...(contact.address && {
-			address: { "@type": "PostalAddress", streetAddress: contact.address, addressCountry: "VN" },
+			address: { "@type": "PostalAddress", streetAddress: contact.address, addressLocality: "TP. Hồ Chí Minh", addressCountry: "VN" },
 		}),
 		...(contact.telHref && { telephone: contact.telHref }),
 		...(contact.email && { email: contact.email }),
 		...(sameAs.length > 0 && { sameAs }),
 	};
+	const website = {
+		"@type": "WebSite",
+		"@id": `${SITE_URL}/#website`,
+		url: SITE_URL,
+		name: SITE_NAME,
+		alternateName: [OWNER_NAME, ...OWNER_ALIASES],
+		inLanguage: "vi-VN",
+		publisher: { "@id": `${SITE_URL}/#business` },
+	};
+	const faqPage = faqs.length > 0 && {
+		"@type": "FAQPage",
+		mainEntity: faqs.map((f) => ({
+			"@type": "Question",
+			name: f.question,
+			acceptedAnswer: { "@type": "Answer", text: f.answer },
+		})),
+	};
+	return { "@context": "https://schema.org", "@graph": [website, business, owner, ...(faqPage ? [faqPage] : [])] };
 }
 
 export default async function Home() {
@@ -109,9 +141,9 @@ export default async function Home() {
 				<section id="ve-chung-toi">
 					<div className="about">
 						<div>
-							<h2 className="about-heading">Về Trần Quang Nhân Kiệt</h2>
+							<h2 className="about-heading">Về Trần Quang Nhân Kiệt – KDesign</h2>
 							<p>
-								Trần Quang Nhân Kiệt là một studio kiến trúc &amp; nội thất quy mô nhỏ, làm việc trực tiếp với từng gia chủ
+								KDesign – studio của kiến trúc sư Trần Quang Nhân Kiệt (Kiệt Trần) – là studio kiến trúc &amp; nội thất quy mô nhỏ, làm việc trực tiếp với từng gia chủ
 								thay vì qua nhiều tầng nhân sự. Đội kiến trúc, đội thiết kế 3D và đội thi công nằm trong cùng một studio,
 								nên bản vẽ và hiện trường luôn khớp nhau — không có chuyện &ldquo;vẽ một đằng, làm một nẻo&rdquo;.
 							</p>

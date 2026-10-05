@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { OWNER_NAME, SITE_NAME, SITE_URL } from "@/lib/site";
 import { getSiteContent } from "@/lib/site-content";
 import type { Project } from "@/lib/projects";
 
@@ -28,7 +28,7 @@ async function findProject(slug: string) {
 function describe(project: Project) {
 	return (
 		project.desc ??
-		`${project.title} — dự án ${project.category?.toLowerCase() ?? "kiến trúc và nội thất"} do ${SITE_NAME} thiết kế tại TP. Hồ Chí Minh.`
+		`${project.title} — dự án ${project.category?.toLowerCase() ?? "kiến trúc và nội thất"} do ${SITE_NAME} – ${OWNER_NAME} (Kiệt Trần) thiết kế tại TP. Hồ Chí Minh.`
 	);
 }
 
@@ -42,12 +42,13 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
 	const { project } = await findProject(slug);
 	if (!project) return { title: "Không tìm thấy dự án" };
 
-	const title = `${project.title} | ${SITE_NAME}`;
+	const title = `${project.title} – thiết kế bởi ${OWNER_NAME}`;
 	const description = describe(project);
 	const path = `/du-an/${project.slug}`;
 	return {
 		title,
 		description,
+		keywords: [project.title, project.category, SITE_NAME, OWNER_NAME, "Kiệt Trần"].filter((k): k is string => Boolean(k)),
 		alternates: { canonical: path },
 		openGraph: {
 			type: "article",
@@ -90,7 +91,7 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
 			description: describe(project),
 			url: `${SITE_URL}${path}`,
 			image: project.slides.map((s) => shareImage(s.src)),
-			creator: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+			creator: { "@type": "Person", name: OWNER_NAME, alternateName: ["Kiệt Trần", SITE_NAME], url: SITE_URL },
 			...(project.year && { dateCreated: project.year }),
 		},
 	];
