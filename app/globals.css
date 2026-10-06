@@ -359,7 +359,9 @@ section{padding-block:clamp(2.6rem,5vw,4.5rem);}
 .lightbox-close:hover{background:rgba(255,255,255,.18);}
 .lightbox-inner{position:relative; display:flex; align-items:center; gap:20px; width:100%; max-width:1440px; flex:1; min-height:0;}
 .lightbox-media{position:relative; flex:1; height:100%; max-height:76vh; overflow:hidden;}
-.lightbox-media img{object-fit:contain; animation:lightbox-slide-in .45s cubic-bezier(.22,.68,0,1);}
+.lightbox-slide{position:relative; width:100%; height:100%; opacity:0;}
+.lightbox-slide.ready{animation:lightbox-slide-in .5s cubic-bezier(.22,.68,0,1) forwards;}
+.lightbox-slide img{object-fit:contain;}
 @keyframes lightbox-slide-in{
 	from{opacity:0; transform:translateX(calc(var(--dir, 1) * 36px)) scale(1.015);}
 	to{opacity:1; transform:translateX(0) scale(1);}
@@ -380,10 +382,13 @@ section{padding-block:clamp(2.6rem,5vw,4.5rem);}
 	/* Ảnh tràn hết chiều ngang thiết bị; không có nút ‹ › — chuyển ảnh bằng vuốt trái/phải hoặc chấm chỉ báo. */
 	.lightbox{padding-inline:0;}
 	.lightbox-inner{gap:0; flex:none; max-width:none;}
-	.lightbox-media{flex:none; width:100%; height:auto; max-height:none; aspect-ratio:var(--ratio,4/3); touch-action:pan-y;}
-	.lightbox-media img{object-fit:cover;}
+	/* Khung cố định chiều cao (tối đa 3:4) để đổi ảnh không làm layout nhảy; ảnh căn giữa trong khung. */
+	.lightbox-media{flex:none; width:100%; height:min(133.33vw,70vh); height:min(133.33vw,70dvh); max-height:none; display:flex; align-items:center; touch-action:pan-y;}
+	.lightbox-slide{height:auto; max-height:100%; aspect-ratio:var(--ratio,4/3);}
+	.lightbox-slide img{object-fit:cover;}
 	.lightbox-nav{display:none;}
-	.lightbox-caption{padding-inline:16px;}
+	/* Chấm chỉ báo cố định ở chân màn hình. */
+	.lightbox-caption{position:fixed; left:0; right:0; bottom:max(24px,env(safe-area-inset-bottom)); margin:0; max-width:none; padding-inline:16px;}
 	.pz-media-hint{display:none;}
 }
 
