@@ -1,10 +1,13 @@
 // Nội dung dự phòng: dùng khi trang quản trị chưa cấu hình (ADMIN_API_URL trống) hoặc không trả lời.
 
+/** Logo mobile mặc định (400×112, emblem bên trái + chữ bên phải; hiển thị cao 56px) khi Admin chưa đặt `headerMobile`. */
+export const DEFAULT_MOBILE_LOGO = "/logos/logo-header-mobile.png";
+
 export const fallbackMedia = {
 	hero: { src: "/images/living-terracotta.jpg", alt: "Phòng khách căn hộ Anh Hoàng, tường đất nung, sofa da nâu, quận 7" },
 	imageBand: { src: "/images/resort-exterior.jpg", alt: "Phối cảnh biệt thự nghỉ dưỡng sân vườn, Phan Thiết" },
 	logoHeader: "/logos/logo-full.svg",
-	logoHeaderMobile: null as string | null,
+	logoHeaderMobile: DEFAULT_MOBILE_LOGO as string | null,
 	logoFooter: "/logos/logo-mark.svg",
 	favicon: null as string | null,
 };

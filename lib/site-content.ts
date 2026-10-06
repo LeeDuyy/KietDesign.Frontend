@@ -1,5 +1,6 @@
 import { getConsulting, getContactInfo, getHomeStats, getSiteMedia, type ApiContactInfo, type ApiSiteMedia } from "@/lib/admin-api";
 import {
+	DEFAULT_MOBILE_LOGO,
 	fallbackBooking,
 	fallbackContact,
 	fallbackFaqs,
@@ -128,8 +129,8 @@ export async function getSiteContent() {
 					hero: { src: media.hero.url, alt: `Công trình tiêu biểu — ${brandAlt}` },
 					imageBand: { src: media.imageBand.url, alt: `Công trình nổi bật — ${brandAlt}` },
 					logoHeader: media.logos.header.url,
-					// null khi chưa đặt: mobile dùng lại logo header.
-					logoHeaderMobile: media.logos.headerMobile?.url ?? null,
+					// Chưa đặt ở Admin thì dùng logo mobile mặc định (public/logos/logo-header-mobile.png).
+					logoHeaderMobile: media.logos.headerMobile?.url ?? DEFAULT_MOBILE_LOGO,
 					logoFooter: media.logos.footer.url,
 					favicon: media.logos.favicon?.url ?? null,
 				}
