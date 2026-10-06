@@ -155,6 +155,12 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
 								style={{ "--dir": dir } as CSSProperties}
 								onTouchStart={onTouchStart}
 								onTouchEnd={onTouchEnd}
+								onClick={(e) => {
+									// Nhấp nửa trái → ảnh trước, nửa phải → ảnh sau.
+									const rect = e.currentTarget.getBoundingClientRect();
+									if (e.clientX < rect.left + rect.width / 2) prev();
+									else next();
+								}}
 							>
 							<LightboxSlide
 								key={activeProject.slides[slideIndex].src}
