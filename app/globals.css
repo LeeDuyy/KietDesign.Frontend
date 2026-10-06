@@ -380,12 +380,12 @@ section{padding-block:clamp(2.6rem,5vw,4.5rem);}
 .lightbox-dots button.active{background:#fff; width:22px; border-radius:4px;}
 @media (max-width:640px){
 	/* Ảnh tràn hết chiều ngang thiết bị; không có nút ‹ › — chuyển ảnh bằng vuốt trái/phải hoặc chấm chỉ báo. */
-	.lightbox{padding-inline:0;}
-	.lightbox-inner{gap:0; flex:none; max-width:none;}
-	/* Khung cố định chiều cao (tối đa 3:4) để đổi ảnh không làm layout nhảy; ảnh căn giữa trong khung. */
-	.lightbox-media{flex:none; width:100%; height:min(133.33vw,70vh); height:min(133.33vw,70dvh); max-height:none; display:flex; align-items:center; touch-action:pan-y;}
-	.lightbox-slide{height:auto; max-height:100%; aspect-ratio:var(--ratio,4/3);}
-	.lightbox-slide img{object-fit:cover;}
+	/* Khung chiếm toàn bộ vùng giữa nút đóng và chấm chỉ báo (cố định, đổi ảnh không nhảy layout); ảnh contain nên thấy trọn vẹn. */
+	.lightbox{padding:72px 0 56px; justify-content:flex-start;}
+	.lightbox-inner{gap:0; flex:1; min-height:0; max-width:none;}
+	.lightbox-media{flex:none; width:100%; height:100%; max-height:none; touch-action:pan-y;}
+	.lightbox-slide{height:100%;}
+	.lightbox-slide img{object-fit:contain;}
 	.lightbox-nav{display:none;}
 	/* Chấm chỉ báo cố định ở chân màn hình. */
 	.lightbox-caption{position:fixed; left:0; right:0; bottom:max(24px,env(safe-area-inset-bottom)); margin:0; max-width:none; padding-inline:16px;}

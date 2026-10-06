@@ -23,8 +23,8 @@ function LightboxSlide({ src, alt }: { src: string; alt: string }) {
 				priority
 				onLoad={(e) => {
 					const { naturalWidth: w, naturalHeight: h } = e.currentTarget;
-					// Ảnh dọc quá cao được chặn ở tỉ lệ 3:4 (full-width, cắt bớt phần thừa).
-					setRatio(w && h ? Math.max(w / h, 0.75) : 4 / 3);
+					// Tỉ lệ thật của ảnh: khung vừa khít, không cắt hình.
+					setRatio(w && h ? w / h : 4 / 3);
 				}}
 			/>
 		</div>
