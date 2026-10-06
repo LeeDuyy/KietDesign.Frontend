@@ -380,7 +380,8 @@ section{padding-block:clamp(2.6rem,5vw,4.5rem);}
 	/* Ảnh tràn hết chiều ngang thiết bị; không có nút ‹ › — chuyển ảnh bằng vuốt trái/phải hoặc chấm chỉ báo. */
 	.lightbox{padding-inline:0;}
 	.lightbox-inner{gap:0; flex:none; max-width:none;}
-	.lightbox-media{flex:none; width:100%; height:auto; max-height:70vh; aspect-ratio:4/3; touch-action:pan-y;}
+	.lightbox-media{flex:none; width:100%; height:auto; max-height:none; aspect-ratio:var(--ratio,4/3); touch-action:pan-y;}
+	.lightbox-media img{object-fit:cover;}
 	.lightbox-nav{display:none;}
 	.lightbox-caption{padding-inline:16px;}
 	.pz-media-hint{display:none;}

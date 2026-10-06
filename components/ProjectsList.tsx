@@ -10,6 +10,7 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
 	const [openIndex, setOpenIndex] = useState<number | null>(null);
 	const [slideIndex, setSlideIndex] = useState(0);
 	const [dir, setDir] = useState(1);
+	const [ratio, setRatio] = useState(4 / 3);
 
 	const activeProject = openIndex !== null ? projects[openIndex] : null;
 
@@ -127,7 +128,7 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
 						</button>
 						<div
 								className="lightbox-media"
-								style={{ "--dir": dir } as CSSProperties}
+								style={{ "--dir": dir, "--ratio": ratio } as CSSProperties}
 								onTouchStart={onTouchStart}
 								onTouchEnd={onTouchEnd}
 							>
@@ -138,6 +139,11 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
 								fill
 								sizes="100vw"
 								priority
+								onLoad={(e) => {
+									const { naturalWidth: w, naturalHeight: h } = e.currentTarget;
+									// Ảnh dọc quá cao được chặn ở tỉ lệ 3:4 (khung full-width, cắt bớt phần thừa).
+									if (w && h) setRatio(Math.max(w / h, 0.75));
+								}}
 							/>
 						</div>
 						<button type="button" className="lightbox-nav next" onClick={next} aria-label="Ảnh sau">
