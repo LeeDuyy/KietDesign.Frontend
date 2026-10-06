@@ -151,8 +151,6 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
 						</button>
 					</div>
 					<div className="lightbox-caption" onClick={(e) => e.stopPropagation()}>
-						<span className="mono">{activeProject.code} · {activeProject.location}</span>
-						<h4>{activeProject.title}</h4>
 						<div className="lightbox-dots">
 							{activeProject.slides.map((slide, i) => (
 								<button

@@ -370,7 +370,7 @@ section{padding-block:clamp(2.6rem,5vw,4.5rem);}
 	display:flex; align-items:center; justify-content:center; transition:background .2s ease;
 }
 .lightbox-nav:hover{background:rgba(255,255,255,.18);}
-.lightbox-caption{margin-top:22px; text-align:center; color:#fff; max-width:640px;}
+.lightbox-caption{margin-top:16px; text-align:center; color:#fff; max-width:640px;}
 .lightbox-caption .mono{display:block; font-size:.8rem; letter-spacing:.08em; color:var(--dyl-primary-mild); margin-bottom:.3rem;}
 .lightbox-caption h4{margin:0 0 .8rem; font-size:1.1rem; font-weight:700; text-transform:none;}
 .lightbox-dots{display:flex; justify-content:center; gap:8px;}
